@@ -8,28 +8,54 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR cmdLine, int cmdSho
 
 void EjerciciosRandom::Window_Open(Win::Event& e)
 {
-	std::uniform_int<int>distribucion(0, 9);
-	int x = 0;
-	for (int i = 0; i < 10; i++)
-	{
-		x = distribucion(randomGenerator);
-		tbxSalida.Text += Sys::Convert::ToString(x);
-		tbxSalida.Text += L"\r\n";
-	}
-	//________________________________________________________ hist1
-	valarray<double> data1(1024);
-	for(int i1 = 0; i1<1024; i1++) data1[i1] = 1+(int) (100.0*rand()/(RAND_MAX+1.0));
-	hist1.SetData(data1, 100, false);
-	hist1.MinX = 0.0;
-	hist1.MaxX = 100.0;
-	hist1.MinY = 0.0;
-	hist1.MaxY = 40.0;
-	hist1.CaptionY = L"Frequency";
+	tbxIntentos.IntValue = intentos;
+	lb2.Text = L"Intentos por hacer: ";
+	lb2.Text += Sys::Convert::ToString(5);
 }
 
 
 
-void EjerciciosRandom::tbxMean_Change(Win::Event& e)
+void EjerciciosRandom::btChecar_Click(Win::Event& e)
 {
+	int x=5;
+	const int checar = tbxEntrada.IntValue;
+	if (checar == randomNumber)
+	{
+		tbxEntrada.ShowBalloonTip(L"Busqueda de número",L"Acertastes al número", TTI_INFO);
+	}
+	else
+	{
+		
+		intentos++;
+		if (intentos == 5)
+		{
+			tbxEntrada.ShowBalloonTip(L"Busqueda de número", L"Intento Fallido Se terminaron tus intentos", TTI_ERROR);
+			tbxIntentos.IntValue = intentos;
+			x = x - intentos;
+			lb2.Text = L"Intentos por hacer: ";
+			lb2.Text += Sys::Convert::ToString(x);
+			btChecar.Enabled = false;
+		}
+		else
+		{
+			tbxEntrada.ShowBalloonTip(L"Busqueda de número", L"Intento Fallido", TTI_ERROR);
+			tbxIntentos.IntValue = intentos;
+			x = x - intentos;
+			lb2.Text = L"Intentos por hacer: ";
+			lb2.Text += Sys::Convert::ToString(x);
+		}
+
+	}
+}
+
+void EjerciciosRandom::btAgain_Click(Win::Event& e)
+{
+	randomNumber = (int)(15.0*rand() / RAND_MAX);
+	intentos = 0;
+	tbxEntrada.Text = L"";
+	tbxIntentos.IntValue = intentos;
+	lb2.Text = L"Intentos por hacer: ";
+	lb2.Text += Sys::Convert::ToString(5);
+	btChecar.Enabled = true;
 }
 
