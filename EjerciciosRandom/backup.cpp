@@ -8,20 +8,38 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR cmdLine, int cmdSho
 
 void EjerciciosRandom::Window_Open(Win::Event& e)
 {
-	this->tbxMaximo.DoubleValue = 10.0;
-	this->tbxMinimo.DoubleValue = 0.0;
-	this->radioEntero.Checked = true;
-	this->radioDouble.Checked = false;
-	//________________________________________________________ spnContador
-	//spnContador.SetBuddy(tbxNumber);
-	//spnContador.SetBuddy(tbxContador);
-	spnContador.SetRange(1, 100);
-	//tbxContador.IntValue = 5;
+	std::uniform_int<int>distribucion(0, 9);
+		int x = 0;
+	for (int i = 0; i < 10; i++)
+	{
+		x = distribucion(randomGenerator);
+		tbxSalida.Text += Sys::Convert::ToString(x);
+		tbxSalida.Text += L"\r\n";
+	}
 }
 
 void EjerciciosRandom::btGenerar_Click(Win::Event& e)
 {
-	tbxSalida.IntValue = rand();
+	tbxSalida.Text = L"";
+	wstring texto;
+	int contador = tbxContador.IntValue;
+	for (int i = 0; i < contador; i++)
+	{
+		if (radioEntero.Checked == true)
+		{
+			int numero = rand() % ((tbxMaximo.IntValue + 1) - (tbxMinimo.IntValue));
+			Sys::Format(texto, L"%d\r\n",numero);
+			tbxSalida.Text += texto;
+		}
+		else
+		{
+			double numero = rand() % ((tbxMaximo.IntValue + 1) - (tbxMinimo.IntValue));
+			Sys::Format(texto, L"%.2f\r\n", numero);
+			tbxSalida.Text += texto;
+		}
+	}
+	
+	
 
 }
 
